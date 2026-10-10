@@ -4,125 +4,653 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#071b14">
-  <meta name="description" content="مباشر سبورت - نتائج المباريات ومواعيد أهم البطولات الرياضية">
-  <title>مباشر سبورت | النتائج والمباريات</title>
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="مباشر سبورت - نتائج المباريات والأحداث الرياضية مباشرة">
+  <title>مباشر سبورت | النتائج الرياضية</title>
+
   <style>
+    :root {
+      --bg: #07111f;
+      --panel: #101e30;
+      --panel2: #15263a;
+      --text: #f1f6fc;
+      --muted: #a2b2c7;
+      --green: #25d695;
+      --blue: #4297ff;
+      --border: #263950;
+      --red: #ff6376;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f5f3;
-      color: #17251e;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.6;
     }
-    header {
-      background: #071b14;
-      color: white;
-      padding: 22px 16px;
-      text-align: center;
+
+    button, input, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+      border: 0;
     }
-    header h1 { margin: 0 0 8px; font-size: 30px; }
-    header p { margin: 0; color: #c4dfcf; }
-    nav {
+
+    a { color: var(--green); }
+
+    .header {
+      background: #0b1929;
+      border-bottom: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .top {
+      max-width: 1100px;
+      margin: auto;
       display: flex;
-      justify-content: center;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
       gap: 10px;
-      padding: 13px;
-      background: #123b2a;
     }
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 7px;
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      border-radius: 13px;
+      background: var(--green);
+      color: #062117;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: bold;
     }
-    nav a:hover { background: #276746; }
-    main { max-width: 850px; margin: auto; padding: 18px 12px; }
-    .welcome {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-      text-align: center;
+
+    h1 { font-size: 23px; margin: 0; }
+    .subtitle { color: var(--muted); font-size: 12px; }
+
+    .live-indicator {
+      color: var(--green);
+      font-size: 13px;
     }
-    .welcome h2 { color: #147343; }
-    .section-title { font-size: 21px; margin: 24px 0 12px; }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: 22px auto;
+    }
+
+    .hero {
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(125deg, #132d43, #101a2c);
+      margin-bottom: 20px;
+    }
+
+    .hero h2 { margin: 0 0 8px; font-size: 25px; }
+    .hero p { margin: 0; color: var(--muted); }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    select, input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .sports, .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 3px 0 12px;
+    }
+
+    .sports button, .tabs button {
+      flex-shrink: 0;
+      background: var(--panel);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    .sports button.active, .tabs button.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: #062117;
+      font-weight: bold;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 18px 0 12px;
+    }
+
+    .section-heading h2 { font-size: 19px; margin: 0; }
+
+    .small { font-size: 12px; color: var(--muted); }
+
+    .matches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
     .match {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+      min-width: 0;
+    }
+
+    .league {
+      color: var(--muted);
+      font-size: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .teams {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      padding: 17px 0;
+    }
+
+    .team {
+      text-align: center;
+      overflow-wrap: anywhere;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: bold;
+      direction: ltr;
+      white-space: nowrap;
+    }
+
+    .score.pending { color: var(--muted); font-size: 15px; }
+
+    .match-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      background: white;
-      border-radius: 10px;
-      padding: 17px 12px;
-      margin: 10px 0;
-      box-shadow: 0 2px 7px #0000000a;
+      font-size: 12px;
+      color: var(--muted);
     }
-    .team { flex: 1; text-align: center; font-weight: bold; }
-    .score { font-size: 19px; font-weight: bold; color: #147343; }
-    .status { font-size: 12px; color: #64756a; margin-top: 5px; }
-    .notice {
-      padding: 13px;
-      background: #e2f3e8;
-      border-radius: 8px;
-      font-size: 14px;
+
+    .status {
+      color: var(--green);
+      font-weight: bold;
     }
-    footer {
+
+    .status.finished { color: var(--muted); }
+    .status.scheduled { color: var(--blue); }
+
+    .message {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 25px 15px;
       text-align: center;
+      border-radius: 14px;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    .primary {
+      background: var(--green);
+      color: #062117;
+      font-weight: bold;
+      padding: 10px 16px;
+      border-radius: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
       padding: 25px 12px;
-      background: #071b14;
-      color: #d5e4da;
-      margin-top: 30px;
-      font-size: 13px;
+      margin-top: 35px;
+    }
+
+    .footer a { text-decoration: none; }
+
+    @media (max-width: 650px) {
+      .matches { grid-template-columns: 1fr; }
+      .hero h2 { font-size: 21px; }
+      h1 { font-size: 20px; }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>⚽ مباشر سبورت</h1>
-    <p>كل النتائج الرياضية في مكان واحد</p>
+  <header class="header">
+    <div class="top">
+      <div class="brand">
+        <div class="logo">م</div>
+        <div>
+          <h1>مباشر سبورت</h1>
+          <div class="subtitle">عالم الرياضة في مكان واحد</div>
+        </div>
+      </div>
+      <div class="live-indicator">● تحديث النتائج تلقائيًا</div>
+    </div>
   </header>
 
-  <nav>
-    <a href="#matches">المباريات</a>
-    <a href="#football">كرة القدم</a>
-    <a href="#about">عن الموقع</a>
-  </nav>
-
-  <main>
-    <section class="welcome">
-      <h2>مرحبًا بكم في مباشر سبورت</h2>
-      <p>تابع نتائج المباريات ومواعيد أهم البطولات الرياضية.</p>
+  <main class="container">
+    <section class="hero">
+      <h2>كل النتائج، لحظة بلحظة</h2>
+      <p>تابع المباريات والنتائج والأحداث الرياضية من هاتفك.</p>
     </section>
 
-    <h2 class="section-title" id="matches">📅 المباريات</h2>
+    <div class="toolbar">
+      <select id="sportSelect" aria-label="اختر الرياضة">
+        <option value="football">⚽ كرة القدم</option>
+        <option value="basketball">🏀 كرة السلة</option>
+        <option value="tennis">🎾 التنس</option>
+        <option value="cricket">🏏 الكريكيت</option>
+      </select>
 
-    <div class="notice">
-      هذه نسخة أولية من الموقع. ستظهر النتائج الحقيقية
-      بعد ربط الموقع بمصدر بيانات رياضية.
+      <input id="search" type="search"
+        placeholder="ابحث عن فريق أو بطولة..."
+        aria-label="البحث عن فريق أو بطولة">
     </div>
 
-    <h2 class="section-title" id="football">⚽ كرة القدم</h2>
+    <nav class="sports" aria-label="الرياضات">
+      <button class="active" data-sport="football">⚽ كرة القدم</button>
+      <button data-sport="basketball">🏀 كرة السلة</button>
+      <button data-sport="tennis">🎾 التنس</button>
+      <button data-sport="cricket">🏏 الكريكيت</button>
+    </nav>
 
-    <div class="match">
-      <div class="team">الفريق الأول</div>
-      <div>
-        <div class="score">- : -</div>
-        <div class="status">موعد المباراة</div>
-      </div>
-      <div class="team">الفريق الثاني</div>
+    <div class="section-heading">
+      <h2>المباريات والنتائج</h2>
+      <span class="small" id="lastUpdate">جارٍ الاتصال...</span>
     </div>
 
-    <section class="welcome" id="about">
-      <h2>عن مباشر سبورت</h2>
-      <p>منصتك لمتابعة الأخبار والنتائج الرياضية باللغة العربية.</p>
+    <nav class="tabs" aria-label="تصفية المباريات">
+      <button class="active" data-filter="all">الكل</button>
+      <button data-filter="live">مباشر</button>
+      <button data-filter="scheduled">القادمة</button>
+      <button data-filter="finished">المنتهية</button>
+    </nav>
+
+    <div class="section-heading">
+      <h2 id="listTitle">مباريات كرة القدم</h2>
+      <button class="primary" id="refresh">تحديث النتائج ↻</button>
+    </div>
+
+    <section id="matches" class="matches" aria-live="polite">
+      <div class="message">جارٍ تحميل البيانات الرياضية...</div>
     </section>
+
+    <p class="small">
+      أوقات المباريات حسب المنطقة الزمنية المحلية لجهازك، عندما يوفر المصدر وقت المباراة.
+    </p>
   </main>
 
-  <footer>
-    <p>© 2026 مباشر سبورت</p>
-    <p>جميع الحقوق محفوظة لأصحابها.</p>
+  <footer class="footer">
+    <p>مباشر سبورت — منصة رياضية مستقلة.</p>
+    <p>
+      بيانات النتائج مقدمة من
+      <a href="https://sportscore.com/" target="_blank" rel="noopener">
+        Powered by SportScore
+      </a>
+    </p>
+    <p>قد تتأخر البيانات أو لا تتوفر بعض المباريات حسب المصدر.</p>
   </footer>
+
+  <script>
+    "use strict";
+
+    const API = "https://sportscore.com/api/widget/matches/";
+    const REFRESH_MS = 60000;
+
+    const sportNames = {
+      football: "كرة القدم",
+      basketball: "كرة السلة",
+      tennis: "التنس",
+      cricket: "الكريكيت"
+    };
+
+    const state = {
+      sport: "football",
+      filter: "all",
+      matches: [],
+      loading: false
+    };
+
+    const $ = id => document.getElementById(id);
+
+    function first(obj, keys, fallback = "") {
+      for (const key of keys) {
+        const value = key.split(".").reduce(
+          (item, part) => item == null ? undefined : item[part], obj
+        );
+        if (value !== undefined && value !== null && value !== "") {
+          return value;
+        }
+      }
+      return fallback;
+    }
+
+    function text(value) {
+      return String(value ?? "");
+    }
+
+    function escapeHTML(value) {
+      return text(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function statusOf(match) {
+      const raw = text(first(match, [
+        "status", "status_text", "state", "fixture.status",
+        "match_status", "matchStatus"
+      ])).toLowerCase();
+
+      if (
+        /live|in.play|in_progress|in progress|playing|half.time|1st half|2nd half|q[1-4]|set [1-5]/.test(raw)
+      ) return "live";
+
+      if (/finished|complete|ended|full.time|ft|final/.test(raw)) {
+        return "finished";
+      }
+
+      if (/scheduled|upcoming|not.started|not_started|fixture|timed/.test(raw)) {
+        return "scheduled";
+      }
+
+      if (/\bns\b/.test(raw)) return "scheduled";
+
+      const start = first(match, [
+        "start_time", "startTime", "date", "datetime",
+        "kickoff", "scheduled_at", "fixture.date"
+      ]);
+
+      if (start) {
+        const date = new Date(start);
+        if (!Number.isNaN(date.getTime())) {
+          return date.getTime() < Date.now() ? "finished" : "scheduled";
+        }
+      }
+
+      return "unknown";
+    }
+
+    function statusLabel(match) {
+      const status = statusOf(match);
+      if (status === "live") return "مباشر";
+      if (status === "finished") return "انتهت";
+      if (status === "scheduled") return "لم تبدأ";
+      return text(first(match, ["status", "status_text"], "الحالة غير متاحة"));
+    }
+
+    function getScore(match) {
+      const home = first(match, [
+        "home_score", "score.home", "scores.home",
+        "homeScore", "result.home"
+      ], null);
+
+      const away = first(match, [
+        "away_score", "score.away", "scores.away",
+        "awayScore", "result.away"
+      ], null);
+
+      if (home !== null && away !== null) {
+        return escapeHTML(home) + " - " + escapeHTML(away);
+      }
+
+      const score = first(match, ["score", "scores", "result"], null);
+
+      if (typeof score === "string" && score.trim()) {
+        return escapeHTML(score);
+      }
+
+      return "—";
+    }
+
+    function getTime(match) {
+      const value = first(match, [
+        "start_time", "startTime", "date", "datetime",
+        "kickoff", "scheduled_at", "fixture.date"
+      ]);
+
+      if (!value) return "الوقت غير متاح";
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return text(value);
+
+      return new Intl.DateTimeFormat("ar-DZ", {
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "2-digit"
+      }).format(date);
+    }
+
+    function normalize(payload) {
+      if (Array.isArray(payload)) return payload;
+
+      for (const key of ["data", "matches", "results", "events", "fixtures"]) {
+        if (Array.isArray(payload?.[key])) return payload[key];
+      }
+
+      return [];
+    }
+
+    function getNames(match) {
+      const home = first(match, [
+        "home_team", "homeTeam", "home.name", "home_team_name",
+        "participant1.name", "player1.name", "competitors.0.name"
+      ], "الفريق الأول");
+
+      const away = first(match, [
+        "away_team", "awayTeam", "away.name", "away_team_name",
+        "participant2.name", "player2.name", "competitors.1.name"
+      ], "الفريق الثاني");
+
+      return { home: text(home), away: text(away) };
+    }
+
+    function getLeague(match) {
+      return text(first(match, [
+        "league.name", "competition.name", "tournament.name",
+        "league", "competition", "tournament", "event_name"
+      ], "البطولة غير محددة"));
+    }
+
+    function render() {
+      const query = $("search").value.trim().toLocaleLowerCase();
+      const filtered = state.matches.filter(match => {
+        const status = statusOf(match);
+        const names = getNames(match);
+        const haystack = [
+          names.home, names.away, getLeague(match)
+        ].join(" ").toLocaleLowerCase();
+
+        const matchesSearch = !query || haystack.includes(query);
+        const matchesFilter =
+          state.filter === "all" ||
+          (state.filter === "live" && status === "live") ||
+          (state.filter === "scheduled" && status === "scheduled") ||
+          (state.filter === "finished" && status === "finished");
+
+        return matchesSearch && matchesFilter;
+      });
+
+      $("listTitle").textContent = "مباريات " + sportNames[state.sport];
+
+      if (!filtered.length) {
+        $("matches").innerHTML =
+          '<div class="message">لا توجد مباريات مطابقة للبحث أو للتصفية الحالية. جرّب رياضة أخرى أو اضغط تحديث النتائج.</div>';
+        return;
+      }
+
+      $("matches").innerHTML = filtered.map(match => {
+        const names = getNames(match);
+        const status = statusOf(match);
+        const cls = status === "finished" ? "finished" :
+                    status === "scheduled" ? "scheduled" : "";
+
+        return `
+          <article class="match">
+            <div class="league">${escapeHTML(getLeague(match))}</div>
+            <div class="teams">
+              <div class="team">${escapeHTML(names.home)}</div>
+              <div class="score ${status === "scheduled" ? "pending" : ""}">
+                ${getScore(match)}
+              </div>
+              <div class="team">${escapeHTML(names.away)}</div>
+            </div>
+            <div class="match-footer">
+              <span>${escapeHTML(getTime(match))}</span>
+              <span class="status ${cls}">${escapeHTML(statusLabel(match))}</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadMatches() {
+      if (state.loading) return;
+      state.loading = true;
+
+      $("lastUpdate").textContent = "جارٍ التحديث...";
+
+      if (!state.matches.length) {
+        $("matches").innerHTML =
+          '<div class="message">جارٍ جلب النتائج الحقيقية من المصدر الرياضي...</div>';
+      }
+
+      try {
+        const url = API + "?sport=" +
+          encodeURIComponent(state.sport) + "&limit=50";
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: { "Accept": "application/json" },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const payload = await response.json();
+        const matches = normalize(payload);
+
+        if (!matches.length) {
+          throw new Error("لم تصل قائمة مباريات مفهومة من المصدر");
+        }
+
+        state.matches = matches;
+        render();
+
+        $("lastUpdate").textContent =
+          "آخر تحديث: " + new Date().toLocaleTimeString("ar-DZ", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+
+      } catch (error) {
+        console.error("Sports data error:", error);
+
+        $("lastUpdate").textContent = "تعذر تحديث البيانات";
+
+        if (!state.matches.length) {
+          $("matches").innerHTML = `
+            <div class="message">
+              <p>تعذر جلب النتائج من المصدر حاليًا.</p>
+              <p class="small">تحقق من اتصال الإنترنت أو أعد المحاولة لاحقًا.</p>
+              <button class="primary" onclick="loadMatches()">إعادة المحاولة</button>
+            </div>
+          `;
+        } else {
+          render();
+        }
+      } finally {
+        state.loading = false;
+      }
+    }
+
+    document.querySelectorAll("[data-sport]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.sport = button.dataset.sport;
+        $("sportSelect").value = state.sport;
+
+        document.querySelectorAll("[data-sport]").forEach(item => {
+          item.classList.toggle("active", item === button);
+        });
+
+        state.matches = [];
+        loadMatches();
+      });
+    });
+
+    $("sportSelect").addEventListener("change", event => {
+      state.sport = event.target.value;
+
+      document.querySelectorAll("[data-sport]").forEach(button => {
+        button.classList.toggle(
+          "active", button.dataset.sport === state.sport
+        );
+      });
+
+      state.matches = [];
+      loadMatches();
+    });
+
+    document.querySelectorAll("[data-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.filter = button.dataset.filter;
+
+        document.querySelectorAll("[data-filter]").forEach(item => {
+          item.classList.toggle("active", item === button);
+        });
+
+        render();
+      });
+    });
+
+    $("search").addEventListener("input", render);
+    $("refresh").addEventListener("click", loadMatches);
+
+    loadMatches();
+    setInterval(loadMatches, REFRESH_MS);
+  </script>
 </body>
 </html>
